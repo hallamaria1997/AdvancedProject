@@ -50,7 +50,6 @@ app.get(url, (req, res) => res.json({ message: 'message' }))
 
 // a dummy endpoint to test running a python script
 app.get(url + '/sum', (req, res) =>{
-	console.log(req.body)
 	const python = spawn('python', ['sum.py', req.body.num1, req.body.num2]);
 	python.stdout.on('data', function (data) {
 		console.log('Pipe data from python script ...');
