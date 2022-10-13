@@ -61,8 +61,12 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "configurations": {
+			"builder": "@angular-devkit/build-angular:dev-server",
+			"options": {
+			  "browserTarget": "advanced-project-frontend:build",
+			  "proxyConfig": "./src/proxy.conf.json"
+			},
+            "configurations": {
             "production": {
               "browserTarget": "advanced-project-frontend:build:production"
             },

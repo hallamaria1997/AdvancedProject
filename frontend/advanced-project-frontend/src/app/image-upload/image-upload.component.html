@@ -1,0 +1,23 @@
+<div class="fileInput">
+    <label for="file">Choose File</label>
+    <input type="file"
+           id="file"
+           (change)="fileChange($event)"
+		   #fileInput>
+</div>
+
+<div id="fileUpload"> 
+	 <button id="selectFileBtn"
+	   (click)="fileInput.click()">
+	   {{ filename || "Select Image" }}
+	 </button>
+	 <button type="button" id="uploadBtn" (click)="uploadFile()">Test Morphing Attack</button>
+ </div>
+
+ <div *ngIf="uploaded">
+	Image uploaded!
+ </div>
+
+<div *ngIf="image_score">
+	Morphing attack likelihood: {{ image_score }}
+</div>

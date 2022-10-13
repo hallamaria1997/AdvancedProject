@@ -64,10 +64,20 @@ app.get(url + '/sum', (req, res) =>{
 })
 
 // a dummy endpoint to test uploading an image
-app.post(url + '/image', upload.single('image'), (req, res) => {
+app.post(url + '/image', upload.single('file'), (req, res) => {
 	console.log(req.file)
 	console.log(req.body.new_filename)
 
+	const python = spawn('python', ['image.py', req.body.filename]);
+	python.stdout.on('data', function (data) {
+		console.log('Pipe data from python script ...');
+		retObj = {score: data.toString()};
+	});
+	python.on('close', (code) => {
+		console.log(`child process close all stdio with code ${code}`);
+		// send data to browser
+		res.status(200).json(retObj)
+	});
 	/*
 	fs.rename(req.file.filename, req.file.originalname, (error) => {
 		if (error) {
@@ -78,7 +88,7 @@ app.post(url + '/image', upload.single('image'), (req, res) => {
 		}
 	});
 	*/
-	res.status(200).json({message: 'Image received'});
+	// res.status(200).json(retObj);
 })
 
 app.listen(port, () => console.log(`Advanced Project app listening on port ${port}!`))

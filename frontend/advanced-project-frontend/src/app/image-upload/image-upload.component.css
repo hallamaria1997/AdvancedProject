@@ -1,0 +1,23 @@
+.fileInput {
+	display: none;
+}
+
+#fileUpload {
+	display: flex;
+	flex-direction: column;
+	padding: 20px;
+	width: 100%;
+}
+
+#selectFileBtn {
+	height: 200px;
+	width: 324px;
+	margin:auto;
+}
+
+#uploadBtn {
+	height: 100px;
+	width: 324px;
+	margin: auto;
+	margin-top: 10px;
+}
