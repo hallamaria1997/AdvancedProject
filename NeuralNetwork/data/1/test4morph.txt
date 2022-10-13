@@ -1,0 +1,15 @@
+image31.png 3.419
+image32.png 3.071
+image33.png 2.881
+image34.png 2.523
+image35.png 3.395
+image36.png 3.477
+image37.png 2.372
+image38.png 2.250
+image39.png 2.930
+image40.png 3.455
+image41.png 2.488
+image42.png 2.909
+image43.png 2.698
+image44.png 3.209
+image45.png 2.837
