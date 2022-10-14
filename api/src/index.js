@@ -68,6 +68,7 @@ app.post(url + '/image', upload.single('file'), (req, res) => {
 	console.log(req.file)
 	console.log(req.body.new_filename)
 
+	// have to change this line when we create the new network file
 	const python = spawn('python', ['image.py', req.body.filename]);
 	python.stdout.on('data', function (data) {
 		console.log('Pipe data from python script ...');

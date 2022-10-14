@@ -9,15 +9,45 @@
 	width: 100%;
 }
 
+.flexRow {
+	display: flex;
+	flex-direction: row;
+}
+
+.flexCol {
+	display: flex;
+	flex-direction: column;
+}
+
 #selectFileBtn {
 	height: 200px;
 	width: 324px;
-	margin:auto;
 }
 
 #uploadBtn {
 	height: 100px;
 	width: 324px;
+	margin-top: 10px;
+}
+
+#imageDisplay {
+	width: 324px;
 	margin: auto;
 	margin-top: 10px;
+}
+
+.image {
+	width: 100%;	
+}
+
+#selectFile {
+	width: 30%;
+}
+
+#imageDisplay {
+	width: 30%;
+}
+
+#result {
+	width: 30%;
 }
