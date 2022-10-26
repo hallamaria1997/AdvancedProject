@@ -58,4 +58,3 @@ image26.png 3.238
 image28.png 3.232
 image29.png 3.744
 image30.png 3.395
-
