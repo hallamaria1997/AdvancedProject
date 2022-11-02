@@ -5,11 +5,11 @@
 #fileUpload {
 	display: flex;
 	flex-direction: column;
-	padding: 20px;
 	width: 100%;
+	margin-top: 50px;
 }
 
-.flexRow {
+.content {
 	display: flex;
 	flex-direction: row;
 }
@@ -20,13 +20,19 @@
 }
 
 #selectFileBtn {
-	height: 200px;
-	width: 324px;
+	height: 100px;
+	width: 90%;
+	font-family: 'Kanit';
+	font-size: 20px;
+	margin:auto;
 }
 
 #uploadBtn {
 	height: 100px;
-	width: 324px;
+	width: 90%;
+	font-family: 'Kanit';
+	font-size: 20px;
+	margin: auto;
 	margin-top: 10px;
 }
 
@@ -37,7 +43,7 @@
 }
 
 .image {
-	width: 100%;	
+	width: 100%;
 }
 
 #selectFile {
@@ -50,4 +56,45 @@
 
 #result {
 	width: 30%;
+	margin: auto;
+	margin-top: 50px;
+}
+
+#imageScore {
+	width: 70%;
+	border: 1px solid black;
+	border-radius: 2px;
+	height: 80px;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 40px;
+	font-weight: bold;
+	margin-top: 10px;
+}
+
+@media only screen and (max-width: 700px) {
+	.content {
+		display: flex;
+		flex-direction: column;
+	}
+
+	#selectFile {
+		width: 100%;
+		text-align: center;
+	}
+
+	#fileUpload {
+		width: 100%;
+	}
+
+	#imageDisplay {
+		width: 50%;
+	}
+
+	#result {
+		width: 80%;
+		margin: auto;
+		margin-top: 10px;
+		align-items: center;
+	}
 }
