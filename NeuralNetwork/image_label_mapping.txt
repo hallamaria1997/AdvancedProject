@@ -1760,7 +1760,6 @@ tiltleft-gray60.png 2.205
 tiltright-gray60.png 2.205
 tiltleft-hue60.png 2.205
 tiltright-hue60.png 2.205
-
 horizontal1.png 2.222
 blur51.png 2.222
 blur151.png 2.222
@@ -3381,7 +3380,6 @@ tiltleft-gray60.png 2.611
 tiltright-gray60.png 2.611
 tiltleft-hue60.png 2.611
 tiltright-hue60.png 2.611
-
 horizontal1.png 1.333
 blur51.png 1.333
 blur151.png 1.333
