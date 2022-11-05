@@ -1,5 +1,5 @@
-<div class="flexRow">
-	<div class="flexCol" id="selectFile">
+<div class="content">
+	<div id="selectFile">
 		<div class="fileInput">
 			<label for="file">Choose File</label>
 			<input type="file"
@@ -11,7 +11,7 @@
 		<div id="fileUpload"> 
 			<button id="selectFileBtn"
 			(click)="fileInput.click()">
-			{{ filename || "Select Image" }}
+			{{ filename ? "Select Another Image" : "Select Image" }}
 			</button>
 			<button type="button" id="uploadBtn" (click)="uploadFile()">
 				Test Morphing Attack
@@ -24,14 +24,14 @@
 		<img src="{{imgUrl}}" class="image" alt="{{filename}}">
 	</div>
 
-	<div class="flexCol" id="result">
+	<div id="result">
 		<div *ngIf="uploaded">
 			Image uploaded!
 		</div>
 
 		<div *ngIf="image_score">
 			Morphing attack likelihood:<br>
-			<b>{{ image_score }}</b>
+			<div id="imageScore">{{ image_score*100 | number: '1.0-2' }}%</div>
 		</div>
 	</div>
 </div>
