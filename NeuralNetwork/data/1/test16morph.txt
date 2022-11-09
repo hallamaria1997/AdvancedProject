@@ -1,15 +1,1 @@
-image5.png 3.395
-image8.png 3.857
-image12.png 3.442
-image13.png 3.744
-image14.png 3.238
-image16.png 3.512
-image20.png 3.690
-image21.png 3.6682
-image23.png 3.818 
-image24.png 3.227
-image25.png 3.000
-image26.png 3.238
-image28.png 3.232
-image29.png 3.744
-image30.png 3.395
+image5.png

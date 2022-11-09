@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[16]:
-
-
 import io
 import torch
 import torch.nn as nn
@@ -15,15 +9,8 @@ import os
 import numpy as np
 
 
-# In[17]:
-
-
 # Use GPU if available
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-
-
-# In[18]:
-
 
 ################## AlexNet ##################
 def bn_relu(inplanes):
@@ -68,38 +55,9 @@ class AlexNet(nn.Module):
         x = x.view(x.size(0), -1)
         return x
 
-
-# In[19]:
-
-
 net = AlexNet()
-net.load_state_dict(torch.load('./pytorch-models/cnn.pth'))
+net.load_state_dict(torch.load('./pytorch-models/cnn_ADAM_schlr.pth'))
 net.eval()
-
-
-# In[20]:
-
-
-# Scaling of data
-valdir = './data/1/test16morph.txt'
-mylines = []                             # Declare an empty list named mylines.
-with open(valdir, 'rt') as myfile: # Open lorem.txt for reading text data.
-    for myline in myfile:                # For each line, stored as myline,
-        mylines.append(float(myline.split()[1]))       # add its contents to mylines.
-print(mylines)   
-
-min_val = min(mylines)
-max_val = max(mylines)
-lower_scale = 0
-upper_scale = 4
-
-for i in range(len(mylines)):
-    mylines[i] = int(round(((upper_scale-lower_scale)*((mylines[i]-min_val)/(max_val-min_val)))+lower_scale))
-    
-print(mylines)
-
-
-# In[21]:
 
 
 def read_img(root, filedir, transform=None):
@@ -111,18 +69,15 @@ def read_img(root, filedir, transform=None):
         linesplit = line.split('\n')[0].split(' ')
         #print(linesplit)
         addr = linesplit[0]
-        target = torch.Tensor([float(linesplit[1])])
+        #target = torch.Tensor([float(linesplit[1])])
         img = Image.open(os.path.join(root, addr)).convert('RGB')
 
         if transform is not None:
             img = transform(img)
         
-        output.append([img, target])
+        output.append([img, 0]) #ÍBS: Changed target to 0
 
     return output
-
-
-# In[25]:
 
 
 def main():
@@ -131,67 +86,89 @@ def main():
     # net = Nets.ResNet(block = Nets.BasicBlock, layers = [2, 2, 2, 2], num_classes = 1).cuda()
 
     # load pretrained model
-    #load_model(torch.load('AlexNet.pth', map_location=torch.device('cpu')), net) #load_model('pytorch-models/alexnet.pth')
+    #load_model(torch.load('./pytorch-models/cnn_ADAM_schlr.pth', map_location=torch.device('cpu')), net) #load_model('pytorch-models/alexnet.pth')
     # load_model(torch.load('./models/resnet18.pth'), net)
-
+    
     # evaluate
     #net.eval()
-
+    
+    #model = torch.load('./pytorch-models/cnn_ADAM_schlr.pth')
+    #model.eval()
+    #net = AlexNet()
+    #net.load_state_dict(torch.load('./pytorch-models/cnn_ADAM_schlr.pth'))
+    #net.eval()
     # loading data...
     #root = 'C:/Users/Lenovo/Documents/DTU-AP/SCUT-FBP5500_v2.1/SCUT-FBP5500_v2/Images'
     #valdir = './data/1/test1.txt'
     #root = 'C:/Users/Lenovo/Documents/DTU-AP/Multi-Morph/asian/af/asian_female_16'
     #valdir = './data/1/morph16.txt'
     #valdir = './data/1/test1.txt'
-    root = 'C:/Users/Lenovo/Documents/AdvancedProject/NeuralNetwork/data/morph16'
+    root = './data/input_test' #'C:/Users/Lenovo/Documents/AdvancedProject/NeuralNetwork/data/morph16'
     valdir = './data/1/test16morph.txt'
     
-    print('hér')
-    print(root, valdir)
+    #test_image_dir = './data/input_test'
+    #test_image_filepath = os.path.join(test_image_dir, 'image5.png')
+ 
+    #print(root, valdir)
+    
+    
+    # Pre-process input image
     transform = transforms.Compose([
             transforms.Resize(256),
             transforms.CenterCrop(224),
             transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),])  
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+    ])  
     val_dataset = read_img(root, valdir, transform=transform)
-    print(val_dataset)
+    #print(val_dataset)
+    
+    #net.eval()
+    
+    with open('./data/classes.txt') as f:
+            classes = [line.strip() for line in f.readlines()]
     
     with torch.no_grad():
-        label = []
+        #label = [] #ÍBS: We don't need the label
         pred = []
+        perc = []
+        c = []
 
         for i, (img, target) in enumerate(val_dataset):
             img = img.unsqueeze(0)#.cuda(non_blocking=True)
-            target = target#.cuda(non_blocking=True)
             output = net(img).squeeze(1)
-            label.append(target.cpu()[0])
             pred.append(output.cpu()[0])
-            print(i)
+            #print(output.shape)
+            _, index = torch.max(output, 1)
+            percentage = torch.nn.functional.softmax(output, dim=1)[0] * 100
+            perc.append(percentage[index[0]].item())
+            c.append(classes[index[0]])
+            
+            
+        #print(output.shape)
+        
+        #with open('./data/classes.txt') as f:
+        #    classes = [line.strip() for line in f.readlines()]
+        
+        #_, index = torch.max(output, 1)
+ 
+        #percentage = torch.nn.functional.softmax(output, dim=1)[0] * 100
+ 
+        #print(classes[index[0]],percentage[index[0]].item())
+        
+        # ÍBS: If you want to see the confidence of the other classes
+        #_, indices = torch.sort(output, descending=True)
+        #print([(classes[idx], percentage[idx].item()) for idx in indices[0][:5]])
 
         # measurements
-        label = np.array(label)
-        pred = np.array(pred)
-        correlation = np.corrcoef(label, pred)[0][1]
-        mae = np.mean(np.abs(label - pred))
-        rmse = np.sqrt(np.mean(np.square(label - pred)))
-    
-    print('\n Label Array: ' + str(label))
-   # print('Label Mean: ' + str(label.mean()) + '\n')
-    print('Prediction Array: ' + str(pred))
-    print('Prediction Mean: ' + str(pred.mean()) + '\n')
-    
-    #print('Correlation:{correlation:.4f}\t'
-    #      'Mae:{mae:.4f}\t'
-    #      'Rmse:{rmse:.4f}\t'.format(
-    #        correlation=correlation, mae=mae, rmse=rmse))
+        #label = np.array(label) #ÍBS: don't need the label only the prediction
+        prediction = np.array(c)
+
+    print('Prediction Array: ' + str(prediction))
 
 
 if __name__ == '__main__':
     main()
     
-
-
-# In[ ]:
 
 
 
