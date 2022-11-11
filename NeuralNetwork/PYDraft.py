@@ -63,7 +63,7 @@ net.eval()
 def read_img(root, filedir, transform=None):
     # Data loading
     with open(filedir, 'r') as f:
-        lines = f.readlines()  
+        lines = f.readlines()
     output = []    
     for line in lines:
         linesplit = line.split('\n')[0].split(' ')
@@ -103,8 +103,10 @@ def main():
     #root = 'C:/Users/Lenovo/Documents/DTU-AP/Multi-Morph/asian/af/asian_female_16'
     #valdir = './data/1/morph16.txt'
     #valdir = './data/1/test1.txt'
-    root = './data/input_test' #'C:/Users/Lenovo/Documents/AdvancedProject/NeuralNetwork/data/morph16'
-    valdir = './data/1/test16morph.txt'
+    #root = './data/input_test' #'C:/Users/Lenovo/Documents/AdvancedProject/NeuralNetwork/data/morph16'
+    root = 'C:\\Users\\Lenovo\\Dropbox\\DTU\\advancedProject\\morph16_all\\morph16_imgs'
+    #valdir = './data/1/test16morph.txt'
+    valdir = 'C:\\Users\\Lenovo\\Dropbox\\DTU\\advancedProject\\morph16_all\\morph16_filenames.txt'
     
     #test_image_dir = './data/input_test'
     #test_image_filepath = os.path.join(test_image_dir, 'image5.png')
@@ -128,12 +130,13 @@ def main():
             classes = [line.strip() for line in f.readlines()]
     
     with torch.no_grad():
-        #label = [] #ÍBS: We don't need the label
+        label = [] #ÍBS: We don't need the label
         pred = []
         perc = []
         c = []
 
         for i, (img, target) in enumerate(val_dataset):
+            print(i)
             img = img.unsqueeze(0)#.cuda(non_blocking=True)
             output = net(img).squeeze(1)
             pred.append(output.cpu()[0])
@@ -149,21 +152,22 @@ def main():
         #with open('./data/classes.txt') as f:
         #    classes = [line.strip() for line in f.readlines()]
         
-        #_, index = torch.max(output, 1)
+        _, index = torch.max(output, 1)
  
-        #percentage = torch.nn.functional.softmax(output, dim=1)[0] * 100
+        percentage = torch.nn.functional.softmax(output, dim=1)[0] * 100
  
-        #print(classes[index[0]],percentage[index[0]].item())
+        print(classes[index[0]],percentage[index[0]].item())
         
         # ÍBS: If you want to see the confidence of the other classes
-        #_, indices = torch.sort(output, descending=True)
-        #print([(classes[idx], percentage[idx].item()) for idx in indices[0][:5]])
+        _, indices = torch.sort(output, descending=True)
+        print([(classes[idx], percentage[idx].item()) for idx in indices[0][:5]])
 
         # measurements
-        #label = np.array(label) #ÍBS: don't need the label only the prediction
+        label = np.array(label) #ÍBS: don't need the label only the prediction
         prediction = np.array(c)
 
-    print('Prediction Array: ' + str(prediction))
+    print('Prediction Array: ', prediction)
+    np.save('C:\\Users\\Lenovo\\Dropbox\\DTU\\advancedProject\\morph16_all\\morph16_prediction', prediction)
 
 
 if __name__ == '__main__':
