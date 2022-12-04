@@ -48,48 +48,23 @@ const upload = multer({
 
 app.get(url, (req, res) => res.json({ message: 'message' }))
 
-// a dummy endpoint to test running a python script
-app.get(url + '/sum', (req, res) =>{
-	const python = spawn('python', ['sum.py', req.body.num1, req.body.num2]);
-	python.stdout.on('data', function (data) {
-		console.log('Pipe data from python script ...');
-		retObj = {sum: data.toString()};
-	});
-	// in close event we are sure that stream from child process is closed
-	python.on('close', (code) => {
-		console.log(`child process close all stdio with code ${code}`);
-		// send data to browser
-		res.status(200).json(retObj)
-	});
-})
-
-// a dummy endpoint to test uploading an image
+// the endpoint for uploading image and getting the beauty score
 app.post(url + '/image', upload.single('file'), (req, res) => {
 	console.log(req.file)
-	console.log(req.body.new_filename)
+	console.log(req.file.filename)
 
-	// have to change this line when we create the new network file
-	const python = spawn('python', ['image.py', req.body.filename]);
+	imgs_path = 'images\\'
+	console.log(imgs_path + req.file.filename)
+	const python = spawn('python', ['neural_net.py', imgs_path + req.file.filename]);
 	python.stdout.on('data', function (data) {
 		console.log('Pipe data from python script ...');
 		retObj = {score: data.toString()};
 	});
-	python.on('close', (code) => {
+	python.on('exit', (code) => {
 		console.log(`child process close all stdio with code ${code}`);
 		// send data to browser
 		res.status(200).json(retObj)
 	});
-	/*
-	fs.rename(req.file.filename, req.file.originalname, (error) => {
-		if (error) {
-			return console.log(`Error: ${error}`);
-		}
-		else {
-			console.log('renaming')
-		}
-	});
-	*/
-	// res.status(200).json(retObj);
 })
 
 app.listen(port, () => console.log(`Advanced Project app listening on port ${port}!`))

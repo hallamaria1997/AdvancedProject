@@ -20,7 +20,7 @@ def bn_relu_pool(inplanes, kernel_size=3, stride=2):
     return nn.Sequential(nn.BatchNorm2d(inplanes), nn.ReLU(inplace=True), nn.MaxPool2d(kernel_size=kernel_size, stride=stride))
 
 class AlexNet(nn.Module):
-    def __init__(self, num_classes=5):
+    def __init__(self, num_classes=401):
         super(AlexNet, self).__init__()
         self.conv1 = nn.Conv2d(3, 96, kernel_size=11, stride=4, bias=False)
         self.relu_pool1 = bn_relu_pool(inplanes=96)
@@ -56,7 +56,8 @@ class AlexNet(nn.Module):
         return x
 
 net = AlexNet()
-net.load_state_dict(torch.load('./pytorch-models/cnn_ADAM_schlr.pth'))
+print(net)
+net.load_state_dict(torch.load('./pytorch-models/cnn_ADAM_schlr_continuous.pth'))
 net.eval()
 
 
@@ -76,7 +77,7 @@ def read_img(root, filedir, transform=None):
             img = transform(img)
         
         output.append([img, 0]) #ÍBS: Changed target to 0
-
+    print('output', type(output))
     return output
 
 
@@ -104,9 +105,9 @@ def main():
     #valdir = './data/1/morph16.txt'
     #valdir = './data/1/test1.txt'
     #root = './data/input_test' #'C:/Users/Lenovo/Documents/AdvancedProject/NeuralNetwork/data/morph16'
-    root = 'C:\\Users\\Lenovo\\Dropbox\\DTU\\advancedProject\\morph16_all\\morph16_imgs'
+    root = 'C:\\Users\\Lenovo\\Dropbox\\DTU\\advancedProject\\val_set_tpdne'
     #valdir = './data/1/test16morph.txt'
-    valdir = 'C:\\Users\\Lenovo\\Dropbox\\DTU\\advancedProject\\morph16_all\\morph16_filenames.txt'
+    valdir = 'C:\\Users\\Lenovo\\Dropbox\\DTU\\advancedProject\\tpdne_contents.txt'
     
     #test_image_dir = './data/input_test'
     #test_image_filepath = os.path.join(test_image_dir, 'image5.png')
@@ -120,13 +121,13 @@ def main():
             transforms.CenterCrop(224),
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-    ])  
+    ])
     val_dataset = read_img(root, valdir, transform=transform)
     #print(val_dataset)
     
     #net.eval()
     
-    with open('./data/classes.txt') as f:
+    with open('./data/classes_cont.txt') as f:
             classes = [line.strip() for line in f.readlines()]
     
     with torch.no_grad():
@@ -167,7 +168,9 @@ def main():
         prediction = np.array(c)
 
     print('Prediction Array: ', prediction)
-    np.save('C:\\Users\\Lenovo\\Dropbox\\DTU\\advancedProject\\morph16_all\\morph16_prediction', prediction)
+    print('Labels', label)
+    np.save('C:\\Users\\Lenovo\\Dropbox\\DTU\\advancedProject\\tpdne_pred_cont', prediction)
+    np.save('C:\\Users\\Lenovo\\Dropbox\\DTU\\advancedProject\\tpdne_labels', label)
 
 
 if __name__ == '__main__':

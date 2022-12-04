@@ -149,8 +149,9 @@ def main():
     net.eval()
 
     # loading data...
-    root = './data/input_test' #'C:/Users/Lenovo/Documents/AdvancedProject/NeuralNetwork/data/morph16'
-    valdir = './data/1/test16morph.txt'
+    root = 'C:\\Users\\Lenovo\\Dropbox\\DTU\\advancedProject\\Images'
+    #valdir = './data/1/test16morph.txt'
+    valdir = 'C:\\Users\\Lenovo\\Dropbox\\DTU\\advancedProject\\bonafide_contents.txt'
     #root = 'C:/Users/Lenovo/Documents/DTU-AP/Multi-Morph/asian/af/asian_female_16'
     #valdir = './data/1/morph16.txt'
     #valdir = './data/1/test1.txt'
@@ -166,6 +167,7 @@ def main():
         pred = []
 
         for i, (img, target) in enumerate(val_dataset):
+            print(i)
             img = img.unsqueeze(0)#.cuda(non_blocking=True)
             #target = target#.cuda(non_blocking=True)
             output = net(img).squeeze(1)
@@ -175,14 +177,15 @@ def main():
 
         # measurements
         #label = np.array(label)
-        pred = np.array(pred)
+        prediction = np.array(pred)
         #correlation = np.corrcoef(label, pred)[0][1]
         #mae = np.mean(np.abs(label - pred))
         #rmse = np.sqrt(np.mean(np.square(label - pred)))
         
     #print('Label: {} - Prediction: {}'.format(label.mean(),pred.mean()))
     #print('Prediction: {}'.format(pred.mean()))
-    print(pred)
+    print('Prediction Array: ', prediction)
+    np.save('C:\\Users\\Lenovo\\Dropbox\\DTU\\advancedProject\\alex_bonafide_prediction', prediction)
     #print('Correlation:{correlation:.4f}\t'
     #      'Mae:{mae:.4f}\t'
     #      'Rmse:{rmse:.4f}\t'.format(

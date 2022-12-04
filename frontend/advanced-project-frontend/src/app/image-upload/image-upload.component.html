@@ -7,7 +7,6 @@
 				(change)="fileChange($event)"
 				#fileInput>
 		</div>
-
 		<div id="fileUpload"> 
 			<button id="selectFileBtn"
 			(click)="fileInput.click()">
@@ -28,10 +27,14 @@
 		<div *ngIf="uploaded">
 			Image uploaded!
 		</div>
+		<div *ngIf="file_sent && uploaded==false">
+			<app-load-spinner></app-load-spinner>
+		</div>
 
 		<div *ngIf="image_score">
-			Morphing attack likelihood:<br>
-			<div id="imageScore">{{ image_score*100 | number: '1.0-2' }}%</div>
+			Beauty Score:<br>
+			<div id="imageScore">{{ image_score | number: '1.0-2' }}/5</div>
+			<div id="morphed">{{ image_score > 1 ? "Morphed" : "Not morphed" }}</div>
 		</div>
 	</div>
 </div>

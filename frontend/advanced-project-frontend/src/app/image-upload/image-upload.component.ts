@@ -15,6 +15,7 @@ export class ImageUploadComponent implements OnInit {
 	filename = '';
 	uploaded = false;
 	imgUrl: any;
+	file_sent = false;
 
 	constructor(private service: ImageUploadService) {}
 
@@ -24,7 +25,9 @@ export class ImageUploadComponent implements OnInit {
 		console.log(event.target.files[0]);
 		this.fileToUpload = event.target.files[0];
 		this.filename = this.fileToUpload.name;
-
+		this.image_score = 0;
+		this.uploaded = false;
+		this.file_sent = false;
 		// to display the image right after upload
 		const reader = new FileReader();
 		reader.readAsDataURL(event.target.files[0]); 
@@ -35,7 +38,7 @@ export class ImageUploadComponent implements OnInit {
 	}
 	
 	uploadFile() {
-		this.service.printUrl();
+		this.file_sent = true;
 		console.log('uploadFile()');
 		this.service.postFile(this.fileToUpload).subscribe((data) => {this.image_score = data.score; this.uploaded=true; console.log(data)});
 	}
