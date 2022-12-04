@@ -18,3 +18,6 @@ Python codes are in three seperate .py files. They work together with the fronte
 
 ### Plots Folder
 Holds all plots generated during the training process and hyperparameter tuning, this was more for documentation purposes.
+
+### Data Folder
+Contains all collected and generated data of the project used for training and prior to that data augmentation.
